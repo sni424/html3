@@ -27,19 +27,17 @@ directionalLight.position.z = 3;
 scene.add(directionalLight);
 let loader = new GLTFLoader();
 
-const genCubeUrls = function (prefix, postfix) {
-  return [
-    prefix + "px" + postfix + "?url",
-    prefix + "nx" + postfix + "?url",
-    prefix + "py" + postfix + "?url",
-    prefix + "ny" + postfix + "?url",
-    prefix + "pz" + postfix + "?url",
-    prefix + "nz" + postfix + "?url",
-  ];
-};
+const genCubeUrls = (prefix, postfix) => [
+  `${prefix}px${postfix}`,
+  `${prefix}nx${postfix}`,
+  `${prefix}py${postfix}`,
+  `${prefix}ny${postfix}`,
+  `${prefix}pz${postfix}`,
+  `${prefix}nz${postfix}`,
+];
 var models = [];
-const urls = genCubeUrls("./textures/cube/", ".png");
-const whiteUrls = genCubeUrls("./textures/white/", ".png");
+const urls = genCubeUrls("/textures/cube/", ".png");
+const whiteUrls = genCubeUrls("/textures/white/", ".png");
 let tempCubeTexture;
 new THREE.CubeTextureLoader().load(urls, function (cubeTexture) {
   tempCubeTexture = cubeTexture;
@@ -57,7 +55,7 @@ let park;
 for (var i = 0; i < 9; i++) {
   loadTemp(i);
 }
-loader.load(`./model/Pano_Sphere.gltf?url`, function (gltf2) {
+loader.load("/model/Pano_Sphere.gltf", (gltf2) => {
   gltf2.scene.position.set(0.05, 0.04, -0.05);
   gltf2.scene.scale.set(0.3, 0.3, 0.3);
   gltf2.scene.rotation.y = -0.85;
@@ -66,10 +64,9 @@ loader.load(`./model/Pano_Sphere.gltf?url`, function (gltf2) {
   gltf2.scene.children[0].children[0].material.lightMap =
     gltf2.scene.children[0].children[0].material.map;
   scene.add(gltf2.scene);
-  renderer.render(scene, camera);
+  render();
 });
-
-const map = new THREE.TextureLoader().load("./textures/images/point.png?url");
+const map = textureLoader.load("/textures/images/point.png");
 const material = new THREE.SpriteMaterial({ map: map });
 const sprite_WelcomePlaza = new THREE.Sprite(material);
 const sprite_Skycommunity = new THREE.Sprite(material);
@@ -139,9 +136,7 @@ function animate() {
 
 function loadTemp(i) {
   loader.load(
-    `./model/LOD/50K/Bugae_UE_0709_50K_${i
-      .toString()
-      .padStart(7, "0")}.glb?url`,
+    `/model/LOD/50K/Bugae_UE_0709_50K_${i.toString().padStart(7, "0")}.glb?url`,
     function (gltf) {
       park = gltf;
       const uuid = gltf.scene.uuid;
@@ -152,7 +147,7 @@ function loadTemp(i) {
       models.push(gltf.scene);
       renderer.render(scene, camera);
       loader.load(
-        `./model/LOD/500K/Bugae_UE_0709_500K_${i
+        `/model/LOD/500K/Bugae_UE_0709_500K_${i
           .toString()
           .padStart(7, "0")}.glb?url`,
         function (gltf1) {
