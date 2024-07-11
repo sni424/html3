@@ -1,6 +1,7 @@
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   40,
@@ -66,7 +67,7 @@ loader.load("/model/Pano_Sphere.gltf", (gltf2) => {
   scene.add(gltf2.scene);
   render();
 });
-const map = textureLoader.load("/textures/images/point.png");
+const map = new THREE.TextureLoader.load("/textures/images/point.png");
 const material = new THREE.SpriteMaterial({ map: map });
 const sprite_WelcomePlaza = new THREE.Sprite(material);
 const sprite_Skycommunity = new THREE.Sprite(material);
