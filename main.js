@@ -67,7 +67,8 @@ loader.load("/model/Pano_Sphere.gltf", (gltf2) => {
   scene.add(gltf2.scene);
   render();
 });
-const map = new THREE.TextureLoader.load("/textures/images/point.png");
+const textureLoader = new THREE.TextureLoader();
+const map = textureLoader.load("/textures/images/point.png");
 const material = new THREE.SpriteMaterial({ map: map });
 const sprite_WelcomePlaza = new THREE.Sprite(material);
 const sprite_Skycommunity = new THREE.Sprite(material);
