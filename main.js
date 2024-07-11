@@ -29,12 +29,12 @@ let loader = new GLTFLoader();
 
 const genCubeUrls = function (prefix, postfix) {
   return [
-    prefix + "px" + postfix,
-    prefix + "nx" + postfix,
-    prefix + "py" + postfix,
-    prefix + "ny" + postfix,
-    prefix + "pz" + postfix,
-    prefix + "nz" + postfix,
+    prefix + "px" + postfix + "?url",
+    prefix + "nx" + postfix + "?url",
+    prefix + "py" + postfix + "?url",
+    prefix + "ny" + postfix + "?url",
+    prefix + "pz" + postfix + "?url",
+    prefix + "nz" + postfix + "?url",
   ];
 };
 var models = [];
@@ -57,7 +57,7 @@ let park;
 for (var i = 0; i < 9; i++) {
   loadTemp(i);
 }
-loader.load(`./model/Pano_Sphere.gltf`, function (gltf2) {
+loader.load(`./model/Pano_Sphere.gltf?url`, function (gltf2) {
   gltf2.scene.position.set(0.05, 0.04, -0.05);
   gltf2.scene.scale.set(0.3, 0.3, 0.3);
   gltf2.scene.rotation.y = -0.85;
@@ -69,7 +69,7 @@ loader.load(`./model/Pano_Sphere.gltf`, function (gltf2) {
   renderer.render(scene, camera);
 });
 
-const map = new THREE.TextureLoader().load("./textures/images/point.png");
+const map = new THREE.TextureLoader().load("./textures/images/point.png?url");
 const material = new THREE.SpriteMaterial({ map: map });
 const sprite_WelcomePlaza = new THREE.Sprite(material);
 const sprite_Skycommunity = new THREE.Sprite(material);
@@ -139,9 +139,12 @@ function animate() {
 
 function loadTemp(i) {
   loader.load(
-    `./model/LOD/50K/Bugae_UE_0709_50K_${i.toString().padStart(7, "0")}.glb`,
+    `./model/LOD/50K/Bugae_UE_0709_50K_${i
+      .toString()
+      .padStart(7, "0")}.glb?url`,
     function (gltf) {
       park = gltf;
+      const uuid = gltf.scene.uuid;
       scene.add(gltf.scene);
       park.scene.position.set(-0.13, -0.1, 0.17);
       park.scene.scale.set(0.03, 0.03, 0.03);
@@ -151,14 +154,19 @@ function loadTemp(i) {
       loader.load(
         `./model/LOD/500K/Bugae_UE_0709_500K_${i
           .toString()
-          .padStart(7, "0")}.glb`,
+          .padStart(7, "0")}.glb?url`,
         function (gltf1) {
           gltf1.scene.position.set(-0.13, -0.1, 0.17);
           gltf1.scene.scale.set(0.03, 0.03, 0.03);
           gltf1.scene.rotation.x = -1.6;
-          models[i].visible = false;
           scene.add(gltf1.scene);
+          models[i].visible = false;
           renderer.render(scene, camera);
+          scene.traverse((child) => {
+            if (child.uuid) {
+              scene.removeFromParent(child);
+            }
+          });
         }
       );
     }
