@@ -138,34 +138,13 @@ function animate() {
 
 function loadTemp(i) {
   loader.load(
-    `/model/LOD/50K/Bugae_UE_0709_50K_${i.toString().padStart(7, "0")}.glb?url`,
-    function (gltf) {
-      park = gltf;
-      const uuid = gltf.scene.uuid;
-      scene.add(gltf.scene);
-      park.scene.position.set(-0.13, -0.1, 0.17);
-      park.scene.scale.set(0.03, 0.03, 0.03);
-      park.scene.rotation.x = -1.6;
-      models.push(gltf.scene);
+    `./model/LOD/500K/Bugae_UE_0709_500K_${i.toString().padStart(7, "0")}.glb`,
+    function (gltf1) {
+      gltf1.scene.position.set(-0.13, -0.1, 0.17);
+      gltf1.scene.scale.set(0.03, 0.03, 0.03);
+      gltf1.scene.rotation.x = -1.6;
+      scene.add(gltf1.scene);
       renderer.render(scene, camera);
-      loader.load(
-        `/model/LOD/500K/Bugae_UE_0709_500K_${i
-          .toString()
-          .padStart(7, "0")}.glb?url`,
-        function (gltf1) {
-          gltf1.scene.position.set(-0.13, -0.1, 0.17);
-          gltf1.scene.scale.set(0.03, 0.03, 0.03);
-          gltf1.scene.rotation.x = -1.6;
-          scene.add(gltf1.scene);
-          models[i].visible = false;
-          renderer.render(scene, camera);
-          scene.traverse((child) => {
-            if (child.uuid) {
-              scene.removeFromParent(child);
-            }
-          });
-        }
-      );
     }
   );
 }
